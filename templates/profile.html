@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Your Profile
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 sidebar">
+            <h4>User Menu</h4>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/history" class="btn btn-success btn-sm w-100">View History</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/buy_history" class="btn btn-success btn-sm w-100">View Buy History</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/sell_history" class="btn btn-success btn-sm w-100">View Sell History</a>
+                </li>
+                <li class="list-group-item">
+                    <h5>Buy Shares</h5>
+                    <form action="/buy" method="post" class="text-start">
+                        <select name="symbol" class="form-select" required>
+                            <option value="" disabled selected>Select Stock</option>
+                            {% for stock in available_stocks %}
+                                <option value="{{ stock }}">{{ stock }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="shares" min="1" required class="form-control mt-1" placeholder="Number of Shares">
+                        <button type="submit" class="btn btn-success btn-sm w-100">Buy</button>
+                    </form>
+                </li>
+                <li class="list-group-item mt-4">
+                    <h5>Change Password</h5>
+                    <a href="/change_password" class="btn btn-primary w-100">Change Password</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/logout" class="btn btn-danger w-100">Logout</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/delete_account" class="btn btn-danger w-100">Delete Account</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <h2>Your Profile</h2>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Username: {{ username }}</h5>
+                    <p class="card-text"><strong>Current Cash Balance:</strong> {{ cash|usd }}</p>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+            {% if success %}
+                <div class="alert alert-success mt-3">{{ success }}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-right: 1px solid #dee2e6;
+    }
+    .sidebar h4 {
+        margin-bottom: 20px;
+    }
+    .list-group-item {
+        text-align: left; /* Left align menu items */
+    }
+    .btn-danger {
+        margin-top: 10px; /* Add space between buttons */
+    }
+    .mt-4 {
+        margin-top: 1.5rem !important; /* Additional spacing for Change Password */
+    }
+</style>
+{% endblock %}

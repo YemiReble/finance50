@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Your Holdings
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 sidebar">
+            <h4>User Menu</h4>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/profile" class="btn btn-success btn-sm w-100">View Profile</a>
+                </li>
+                <li class="list-group-item">
+                    <form action="/add_cash" method="post" class="text-start">
+                        <label for="additional_cash">Add Cash:</label>
+                        <input type="number" name="additional_cash" min="1" required class="form-control" placeholder="Amount">
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">Add Cash</button>
+                    </form>
+                </li>
+                <li class="list-group-item">
+                    <h5>Buy Shares</h5>
+                    <form action="/buy" method="post" class="text-start">
+                        <select name="symbol" class="form-select" required>
+                            <option value="" disabled selected>Select Stock</option>
+                            {% for stock in available_stocks %}
+                                <option value="{{ stock }}">{{ stock }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="shares" min="1" required class="form-control mt-1" placeholder="Number of Shares">
+                        <button type="submit" class="btn btn-success btn-sm mt-1">Buy</button>
+                    </form>
+                </li>
+                <li class="list-group-item">
+                    <h5>Sell Shares</h5>
+                    <form action="/sell" method="post" class="text-start">
+                        <select name="symbol" class="form-select" required>
+                            <option value="" disabled selected>Select Stock</option>
+                            {% for stock in holdings %}
+                                <option value="{{ stock['symbol'] }}">{{ stock['symbol'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="shares" min="1" required class="form-control mt-1" placeholder="Number of Shares">
+                        <button type="submit" class="btn btn-danger btn-sm mt-1">Sell</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <h2>Your Stock Holdings</h2>
+            <p><strong>Current Cash Balance:</strong> {{ cash|usd }}</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Stock Symbol</th>
+                        <th>Shares Owned</th>
+                        <th>Current Price</th>
+                        <th>Total Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in holdings %}
+                        <tr>
+                            <td>{{ stock['symbol'] }}</td>
+                            <td>{{ stock['shares'] }}</td>
+                            <td>{{ stock['current_price']|usd }}</td>
+                            <td>{{ stock['total_value']|usd }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4>Grand Total: {{ grand_total|usd }}</h4>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-right: 1px solid #dee2e6;
+    }
+    .sidebar h4 {
+        margin-bottom: 20px;
+    }
+    .list-group-item {
+        text-align: left; /* Left align menu items */
+    }
+    .btn-info {
+        width: 100%; /* Make the button full width */
+    }
+</style>
+{% endblock %}

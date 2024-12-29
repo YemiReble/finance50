@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock Quote Results
+{% endblock %}
+
+{% block main %}
+    <h2>Stock Quote for {{ stock['symbol'] }}</h2>
+    <div class="mb-3">
+        <p><strong>Name:</strong> {{ stock['name'] }}</p>
+        <p><strong>Price:</strong> {{ stock['price']|usd }}</p>
+        <p><strong>Symbol:</strong> {{ stock['symbol'] }}</p>
+        <!-- <p><strong>Volume:</strong> {{ stock['volume'] }}</p> -->
+    </div>
+    <a class="btn btn-primary" href="/quote">Get Another Quote</a>
+{% endblock %}
